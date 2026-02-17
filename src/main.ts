@@ -69,7 +69,7 @@ function wrapInArray<T>(arg: T): [T] {
 
 // Task #6
 
-function getitemID<T extends { id: number }>(object: T): number {
+function getItemID<T extends { id: number }>(object: T): number {
   return object.id;
 }
 
@@ -95,11 +95,11 @@ async function loadStatistics(): Promise<number> {
   return first + second;
 }
 
-console.log(await loadStatistics());
+loadStatistics().then((result: number): void => console.log(result));
 
 // Task #9
 
-class Employee implements Payable {
+class Employee {
   name: string;
   salary: number;
 
@@ -110,10 +110,6 @@ class Employee implements Payable {
 
   getInfo(): string {
     return `${this.name}'s salary is ${this.salary}.`;
-  }
-
-  pay(amount: number): void {
-    this.salary += amount;
   }
 }
 
@@ -138,10 +134,34 @@ interface Payable {
   pay(amount: number): void;
 }
 
+class Worker implements Payable {
+  name: string;
+  salary: number;
+
+  constructor(name: string, salary: number) {
+    ((this.name = name), (this.salary = salary));
+  }
+
+  pay(amount: number): void {
+    if (amount <= this.salary) {
+      console.log(`Payed ${this.name} ${amount}$.`);
+    } else {
+      console.log(
+        `Payed ${this.name} ${this.salary}$ and ${amount - this.salary}$ bonus.`,
+      );
+    }
+  }
+}
+
+const worker = new Worker("eugene", 500);
+worker.pay(worker.salary);
+const anotherWorker = new Worker("max", 200);
+anotherWorker.pay(300);
+
 // Task #12
 
 abstract class Transport {
-  abstract readonly speed: number;
+  abstract speed: number;
   abstract move(): void;
 }
 
@@ -169,7 +189,7 @@ type ApiResult<T> = {
   timestamp: Date;
 };
 
-interface User {
+interface AnotherUser {
   id: number;
   name: string;
   email: string;
@@ -181,7 +201,7 @@ interface Product {
   price: number;
 }
 
-function getResult(arg: User | Product[]): ApiResult<User | Product[]> {
+function getResult<T>(arg: T | T[]): ApiResult<T | T[]> {
   return {
     data: arg,
     success: true,
@@ -189,7 +209,7 @@ function getResult(arg: User | Product[]): ApiResult<User | Product[]> {
   };
 }
 
-const user: User = {
+const user: AnotherUser = {
   id: 1,
   name: "Eugene",
   email: "eugene@gmail.com",
