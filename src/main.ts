@@ -201,7 +201,7 @@ interface Product {
   price: number;
 }
 
-function getResult<T>(arg: T | T[]): ApiResult<T | T[]> {
+function getResult<T>(arg: T): ApiResult<T> {
   return {
     data: arg,
     success: true,
